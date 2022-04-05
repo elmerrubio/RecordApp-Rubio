@@ -17,7 +17,8 @@ Direction:
 2022-04-01  
 [/] Modify the field name id in user account  
 
-## These are the items you have to accomplished:  
+## These are the items you have to accomplished: 
+2022-04-5 
 [/] Add assets to the project.  
 [/] Create includes directory; create navbar and sidebar.  
 [/] Setup database configuration.  
