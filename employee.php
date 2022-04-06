@@ -54,8 +54,14 @@ mysqli_close($conn);
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card strpied-tabled-with-hover">
+                                <br/>
+                                <div class="col-md-12">
+                                <a href="add_employee.php">
+                                    <button type="submit" class="btn btn-info btn-fill pull-right">Add New Employee</button>
+                                </a>
+                                </div>
                                 <div class="card-header ">
-                                    <h4 class="card-title">Employee</h4>
+                                    <h4 class="card-title">Employees</h4>
                                     <p class="card-category">Here is a subtitle for this table</p>
                                 </div>
                                 <div class="card-body table-full-width table-responsive">
