@@ -24,7 +24,7 @@ require('config/db.php');
 
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-$results_per_page = 20;
+$results_per_page = 10;
 
 $query="SELECT * FROM office";
 $result=mysqli_query($conn, $query);
@@ -113,6 +113,13 @@ mysqli_close($conn);
                                         <td><?php echo $office ['city']; ?></td>
                                         <td><?php echo $office ['country']; ?></td>
                                         <td><?php echo $office ['postal']; ?></td>
+                                        <td>
+                                        <td>
+                                            <a href="edit_office.php?id=<?php echo $office['id'] ?>">
+                                            <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                            </a>
+                                        </td>
+                                        </td>
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>

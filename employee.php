@@ -24,7 +24,7 @@ require('config/db.php');
 
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-$results_per_page = 100;
+$results_per_page = 10;
 
 $query="SELECT * FROM employee";
 $result=mysqli_query($conn, $query);
@@ -41,14 +41,14 @@ if (!isset($_GET['page'])) {
 $page_first_result=($page-1) * $results_per_page;
 
 if (strlen($search) > 0) {
-    $query = 'SELECT employee.lastname, employee.firstname,employee.address, office.name as office_name FROM employee, office WHERE employee.office_id = office.id AND employee.address = '.$search.' ORDER BY employee.lastname LIMIT '.$page_first_result.','.$results_per_page; 
+    $query = 'SELECT employee.id, employee.lastname, employee.firstname,employee.address, office.name as office_name FROM employee, office WHERE employee.office_id = office.id AND employee.address = '.$search.' ORDER BY employee.lastname LIMIT '.$page_first_result.','.$results_per_page; 
 }else{
-$query = 'SELECT employee.lastname, employee.firstname,employee.address, office.name as office_name FROM employee, office WHERE employee.office_id = office.id ORDER BY employee.lastname LIMIT '.$page_first_result.','.$results_per_page;
+$query = 'SELECT employee.id, employee.lastname, employee.firstname,employee.address, office.name as office_name FROM employee, office WHERE employee.office_id = office.id ORDER BY employee.lastname LIMIT '.$page_first_result.','.$results_per_page;
 }
 
-$result = mysqli_query($conn, $query);
+$result = mysqli_query($conn, $query)or die( mysqli_error($conn));;
 
-$offices = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$employees = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 mysqli_free_result($result);
 
@@ -71,7 +71,7 @@ mysqli_close($conn);
                     <div class="section">
                     </div>
                     <div class="row">
-                <div class="content">
+                    <div class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
@@ -79,12 +79,12 @@ mysqli_close($conn);
                                 <br/>
                                 <div class="col-md-12">
                                     <form action="employee.php" method="GET">
-                                        <input type="text" name="search" placeholder="Search in address"/>
+                                        <input type="text" name="search" />
                                         <input type="submit" value="Search" class="btn btn-info btn-fill" />
                                     </form>   
                                 </div>
                                 <div class="col-md-12">
-                                <a href="add_employee.php">
+                                <a href="employee-add.php">
                                     <button type="submit" class="btn btn-info btn-fill pull-right">Add New Employee</button>
                                 </a>
                                 </div>
@@ -99,14 +99,21 @@ mysqli_close($conn);
                                             <th>First Name</th>
                                             <th>Address</th>
                                             <th>Office</th>
+                                            <th>Action</th>
                                         </thead>
                                         <tbody>
-                                        <?php foreach($offices as $office) : ?>
+                                        <?php foreach($employees as $employee) : ?>
                                             <tr>
-                                        <td><?php echo $office ['lastname']; ?></td>
-                                        <td><?php echo $office ['firstname']; ?></td>
-                                        <td><?php echo $office ['address']; ?></td>
-                                        <td><?php echo $office ['office_name']; ?></td>
+                                        <td><?php echo $employee ['lastname']; ?></td>
+                                        <td><?php echo $employee ['firstname']; ?></td>
+                                        <td><?php echo $employee ['address']; ?></td>
+                                        <td><?php echo $employee ['office_name']; ?></td>
+                                        <td>
+                                            <a href="edit_employee.php?id=<?php echo $employee['id'] ?>">
+                                            <button type="submit" class="btn 
+                                           btn-warning btn-fill pull-right">Edit</button>
+                                            </a>
+                                        </td>
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
@@ -117,7 +124,8 @@ mysqli_close($conn);
                     </div>
                     <?php
                         for ($page=1; $page <= $number_of_page; $page++){ 
-                        echo '<a href="employee.php?page='. $page .'"> '. $page .'</a>';}
+                        echo '<a href="employee.php?page='. $page .'"> '. $page .'</a>';
+                    }
                     ?>
                 </div>
             </div>

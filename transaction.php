@@ -42,16 +42,15 @@ if (!isset($_GET['page'])) {
 $page_first_result=($page-1) * $results_per_page;
 
 if (strlen($search) > 0) {
-    $query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND transaction.office_id = office.id AND transaction.documentcode ='. $search .' ORDER BY transaction.documentcode, transaction.datelog LIMIT '.$page_first_result.','.$results_per_page;
+    $query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname,  transaction.id, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND transaction.office_id = office.id AND transaction.documentcode ='. $search .' ORDER BY transaction.documentcode, transaction.datelog LIMIT '.$page_first_result.','.$results_per_page;
 }else{
-    $query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND transaction.office_id = office.id LIMIT '.$page_first_result.','.$results_per_page;
+    $query = 'SELECT CONCAT (employee.lastname,",",employee.firstname) AS employee_fullname, transaction.id, transaction.datelog, transaction.documentcode,transaction.action,transaction.remarks,office.name AS office_name FROM employee, office, transaction WHERE transaction.employee_id=employee.id AND transaction.office_id = office.id LIMIT '.$page_first_result.','.$results_per_page;
 }
 
 $result = mysqli_query($conn, $query)or die( mysqli_error($conn));
 
 $transactions = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-mysqli_close($conn);
 
 ?>
 
@@ -102,7 +101,9 @@ mysqli_close($conn);
                                             <th>Remarks</th>
                                         </thead>
                                         <tbody>
-                                <?php foreach($transactions as $transaction) : ?>
+                              
+                                        <?php 
+                                        foreach($transactions as $transaction) : ?>
                                             <tr>
                                         <td><?php echo $transaction ['datelog']; ?></td>
                                         <td><?php echo $transaction ['documentcode']; ?></td>
@@ -110,6 +111,14 @@ mysqli_close($conn);
                                         <td><?php echo $transaction ['office_name']; ?></td>
                                         <td><?php echo $transaction ['employee_fullname']; ?></td>
                                         <td><?php echo $transaction ['remarks']; ?></td>
+                                        <td>
+                                        <td>
+                                            <a href="edit_transaction.php?id=<?php echo $transaction['id'] ?>">
+                                            <button type="submit" class="btn btn-warning btn-fill pull-right">Edit</button>
+                                            </a>
+                                        </td>
+                                        </td>
+
                                             </tr>
                                             <?php endforeach ?>
                                         </tbody>
